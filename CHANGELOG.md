@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [v4.2.0]
+
+### Added
+
+- **Framework:**
+  - Added a new database upgrade function for rbac.db. ([#6963](https://github.com/wazuh/wazuh/pull/6963))
+  
+
 ## [v4.1.0]
 
 ### Added
