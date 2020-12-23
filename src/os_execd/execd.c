@@ -429,23 +429,19 @@ static void ExecdStart(int q)
         }
 
         /* Get the command to execute (valid name) */
-        if(!strcmp(name, "restart-wazuh")) {
+        if(!strcmp(name, "restart-wazuh") || !strcmp(name, "restart-ossec0")) {
 
-            if(cmd_api[0] == NULL) {
-                char script_path[PATH_MAX] = {0};
-                snprintf(script_path, PATH_MAX, "%s/%s", DEFAULTDIR, "active-response/bin/restart.sh");
-                os_strdup(script_path, cmd_api[0]);
+            char script_path[PATH_MAX] = {0};
+            snprintf(script_path, PATH_MAX, "%s/%s", DEFAULTDIR, "active-response/bin/read-stdin");
+            os_strdup(script_path, cmd_api[0]);
+
+            wfd_t * wfd = wpopenv(cmd_api[0], cmd_api, W_BIND_STDIN);
+            if (wfd) {
+                char buffer[] = "Example test lalala\n";
+                fwrite(buffer, 1, sizeof(buffer), wfd->file);
+                wpclose(wfd);
             }
 
-            if(cmd_api[1] == NULL) {
-                #ifdef CLIENT
-                    os_strdup("agent", cmd_api[1]);
-                #else
-                    os_strdup("manager", cmd_api[1]);
-                #endif
-            }
-
-            ExecCmd(cmd_api);
             continue;
         }
 

@@ -393,6 +393,9 @@
                             <Component Id="NETSH_WIN_2016.CMD" DiskId="1" Guid="B2011FD2-3F82-4FFD-B6C3-32665037C4EA">
                                 <File Id="NETSH_WIN_2016.CMD" Name="netsh-win-2016.cmd" Source="netsh-win-2016.cmd" />
                             </Component>
+                            <Component Id="READ-STDIN.EXE" DiskId="1" Guid="1A33BA16-EFF3-4E37-880D-76B236D73B3F">
+                                <File Id="READ-STDIN.EXE" Name="read-stdin.exe" Source="read-stdin.exe" />
+                            </Component>
                         </Directory>
                         <Component Id="ACTIVE_RESPONSES.LOG" DiskId="1" Guid="249F3287-B69D-46F0-8888-3FED24998E07">
                             <File Id="ACTIVE_RESPONSES.LOG" Name="active-responses.log" Source="active-responses.log" />

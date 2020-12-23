@@ -165,6 +165,27 @@ void WinExecdRun(char *exec_msg)
         tmp_msg++;
     }
 
+    /* Get the command to execute (valid name) */
+    if(!strcmp(name, "restart-ossec0")) {
+        char *cmd_api[MAX_ARGS];
+
+        /* Initialize the api cmd arguments */
+        for (i = 0; i < MAX_ARGS; i++) {
+            cmd_api[i] = NULL;
+        }
+
+        os_strdup("C:\\Program Files (x86)\\ossec-agent\\active-response\\bin\\read-stdin.exe", cmd_api[0]);
+
+        wfd_t * wfd = wpopenv(cmd_api[0], cmd_api, W_BIND_STDIN);
+        if (wfd) {
+            char buffer[] = "Example test lalala\n";
+            fwrite(buffer, 1, sizeof(buffer), wfd->file);
+            wpclose(wfd);
+        }
+
+        return;
+    }
+
     /* Get user */
     cmd_user = tmp_msg;
     tmp_msg = strchr(tmp_msg, ' ');

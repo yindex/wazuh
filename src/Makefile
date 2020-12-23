@@ -621,7 +621,7 @@ $(SELINUX_MODULE): $(SELINUX_ENFORCEMENT)
 
 test_programs = tap_wazuhdb_op tap_os_crypto tap_os_net tap_os_regex tap_shared tap_os_zlib tap_os_xml tap_fluentd_forwarder
 
-WINDOWS_BINS:=win32/wazuh-agent.exe win32/wazuh-agent-eventchannel.exe win32/manage_agents.exe win32/setup-windows.exe win32/setup-syscheck.exe win32/setup-iis.exe win32/add-localfile.exe win32/os_win32ui.exe win32/agent-auth.exe
+WINDOWS_BINS:=win32/wazuh-agent.exe win32/wazuh-agent-eventchannel.exe win32/manage_agents.exe win32/setup-windows.exe win32/setup-syscheck.exe win32/setup-iis.exe win32/add-localfile.exe win32/os_win32ui.exe win32/agent-auth.exe win32/read-stdin.exe
 
 ifeq (${MAKECMDGOALS},winagent)
 $(error Do not use 'winagent' directly, use 'TARGET=winagent')
@@ -1414,7 +1414,7 @@ manage_agents: ${addagent_o}
 
 #### Active Response ####
 
-active_response_programs = ### AR program list
+active_response_programs = read-stdin
 
 $(active_response_programs): $(BUILD_LIBS)
 
@@ -1426,6 +1426,9 @@ active_response_o := $(active_response_c:.c=.o)
 
 active-response/%.o: active-response/%.c
 	${OSSEC_CC} ${OSSEC_CFLAGS} -I./active-response -DARGV0=\"active-responses\" -c $^ -o $@
+
+read-stdin: active-response/read-stdin.o
+	${OSSEC_CCBIN} ${OSSEC_LDFLAGS} $^ ${OSSEC_LIBS} -o $@
 
 #### Util ##########
 
@@ -1933,6 +1936,9 @@ win32/os_win32ui.exe: win32/ui_resource.o win32/win_service_rk.o ${win32_ui_o}
 
 win32/agent-auth.exe: win32/auth_resource.o win32/win_service_rk.o os_auth/main-client.o os_auth/ssl.o os_auth/main-client.o os_auth/check_cert.o addagent/validate.o
 	${OSSEC_CCBIN} -DARGV0=\"agent-auth\" -DOSSECHIDS ${OSSEC_LDFLAGS} $^ ${OSSEC_LIBS} -lshlwapi -lwsock32 -lsecur32 -lws2_32 -flto -o $@
+
+win32/read-stdin.exe: active-response/read-stdin.o
+	${OSSEC_CCBIN} -DARGV0=\"read-stdin\" ${OSSEC_LDFLAGS} $^ ${OSSEC_LIBS} -o $@
 
 ####################
 #### Clean #########
